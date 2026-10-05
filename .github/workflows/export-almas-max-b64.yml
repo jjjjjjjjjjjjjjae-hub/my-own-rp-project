@@ -24,14 +24,14 @@ jobs:
           gradle-version: '8.9'
       - name: Build APK
         run: gradle -p almas-net-max assembleDebug --stacktrace
-      - name: Export APK as Base64
+      - name: Export direct APK
         run: |
           mkdir -p generated
-          base64 -w0 almas-net-max/app/build/outputs/apk/debug/app-debug.apk > generated/Almas-Net-Optimizer-MAX-v2.apk.b64
-      - name: Commit exported APK text
+          cp almas-net-max/app/build/outputs/apk/debug/app-debug.apk generated/Almas-Net-Optimizer-MAX-v2.apk
+      - name: Commit direct APK
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add generated/Almas-Net-Optimizer-MAX-v2.apk.b64
-          git commit -m 'Export Almas Net Optimizer MAX v2 APK' || exit 0
+          git add generated/Almas-Net-Optimizer-MAX-v2.apk
+          git commit -m 'Publish direct Almas Net Optimizer MAX v2 APK' || exit 0
           git push
