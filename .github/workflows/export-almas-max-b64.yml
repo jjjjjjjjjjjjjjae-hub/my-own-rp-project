@@ -1,4 +1,4 @@
-name: Export Almas MAX APK
+name: Export ALMAS TELEKOM APK
 on:
   push:
     branches: [ main ]
@@ -27,11 +27,11 @@ jobs:
       - name: Export direct APK
         run: |
           mkdir -p generated
-          cp almas-net-max/app/build/outputs/apk/debug/app-debug.apk generated/Almas-Net-Optimizer-MAX-v3.apk
+          cp almas-net-max/app/build/outputs/apk/debug/app-debug.apk generated/ALMAS-TELEKOM-v4.apk
       - name: Commit direct APK
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add generated/Almas-Net-Optimizer-MAX-v3.apk
-          git commit -m 'Publish direct Almas Net Optimizer MAX v3 APK' || exit 0
+          git add generated/ALMAS-TELEKOM-v4.apk
+          git commit -m 'Publish ALMAS TELEKOM v4 APK' || exit 0
           git push
