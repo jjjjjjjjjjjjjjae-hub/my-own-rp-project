@@ -3,6 +3,7 @@ on:
   push:
     branches: [ main ]
     paths:
+      - 'almas-net-max/**'
       - '.github/workflows/export-almas-max-b64.yml'
   workflow_dispatch:
 
