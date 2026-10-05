@@ -1,0 +1,35 @@
+name: Export Almas Net Optimizer APK Chunks
+
+on:
+  push:
+    paths:
+      - '.github/workflows/export-almas-apk-chunks.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build-export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Build APK
+        run: gradle -p almas-net-max :app:assembleDebug --no-daemon
+      - name: Export APK chunks
+        run: base64 -w0 almas-net-max/app/build/outputs/apk/debug/app-debug.apk | fold -w 1000 > almas-net-max/Almas-Net-Optimizer-MAX-v2.chunks
+      - name: Commit exported chunks
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add almas-net-max/Almas-Net-Optimizer-MAX-v2.chunks
+          git commit -m "Export Almas Net Optimizer MAX v2 chunks [skip ci]" || exit 0
+          git push
