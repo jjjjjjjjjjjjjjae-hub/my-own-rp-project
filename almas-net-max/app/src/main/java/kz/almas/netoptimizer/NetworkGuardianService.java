@@ -16,9 +16,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,7 +41,7 @@ public class NetworkGuardianService extends Service {
 
     private final Runnable analyzerLoop = new Runnable() {
         @Override public void run() {
-            pool.execute(() -> analyzeNetwork(false));
+            pool.execute(NetworkGuardianService.this::analyzeNetwork);
             handler.postDelayed(this, ANALYZE_INTERVAL_MS);
         }
     };
@@ -70,7 +67,7 @@ public class NetworkGuardianService extends Service {
         return START_STICKY;
     }
 
-    @Nullable @Override
+    @Override
     public IBinder onBind(Intent intent) { return null; }
 
     @Override
@@ -80,7 +77,7 @@ public class NetworkGuardianService extends Service {
         super.onDestroy();
     }
 
-    private void analyzeNetwork(boolean force) {
+    private void analyzeNetwork() {
         if (!hasInternet()) {
             updateMonitor("Интернет жоқ", "Қосылған желі тексерілмеді");
             return;
@@ -241,35 +238,40 @@ public class NetworkGuardianService extends Service {
 
     private Notification monitorNotification(String title, String text) {
         Intent open = new Intent(this, MainActivity.class);
-        PendingIntent pi = PendingIntent.getActivity(this, 1, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        return new NotificationCompat.Builder(this, CH_MONITOR)
-                .setSmallIcon(android.R.drawable.stat_sys_download_done)
+        PendingIntent pi = PendingIntent.getActivity(this, 1, open,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        Notification.Builder b = Build.VERSION.SDK_INT >= 26
+                ? new Notification.Builder(this, CH_MONITOR)
+                : new Notification.Builder(this);
+        b.setSmallIcon(android.R.drawable.stat_sys_download_done)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setContentIntent(pi)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
-                .build();
+                .setPriority(Notification.PRIORITY_LOW);
+        return b.build();
     }
 
     private void updateMonitor(String title, String text) {
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.notify(NOTIF_MONITOR, monitorNotification(title, text));
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(NOTIF_MONITOR, monitorNotification(title, text));
     }
 
     private void showHotspotNotification(int clients) {
         Intent open = new Intent(this, MainActivity.class);
         open.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pi = PendingIntent.getActivity(this, 2, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        Notification n = new NotificationCompat.Builder(this, CH_ALERT)
-                .setSmallIcon(android.R.drawable.stat_sys_warning)
+        PendingIntent pi = PendingIntent.getActivity(this, 2, open,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        Notification.Builder b = Build.VERSION.SDK_INT >= 26
+                ? new Notification.Builder(this, CH_ALERT)
+                : new Notification.Builder(this);
+        b.setSmallIcon(android.R.drawable.stat_sys_warning)
                 .setContentTitle("📡 Hotspot Telecom")
                 .setContentText(clients + " клиент қосылды. Әр адамға Mbps лимитін таңда.")
                 .setContentIntent(pi)
                 .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .build();
-        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(NOTIF_HOTSPOT, n);
+                .setPriority(Notification.PRIORITY_HIGH);
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(NOTIF_HOTSPOT, b.build());
     }
 
     private static class Measure {
@@ -279,7 +281,11 @@ public class NetworkGuardianService extends Service {
         final int loss;
         final double downMbps;
         Measure(boolean valid, double ping, double jitter, int loss, double downMbps) {
-            this.valid = valid; this.ping = ping; this.jitter = jitter; this.loss = loss; this.downMbps = downMbps;
+            this.valid = valid;
+            this.ping = ping;
+            this.jitter = jitter;
+            this.loss = loss;
+            this.downMbps = downMbps;
         }
         static Measure invalid() { return new Measure(false, 0, 0, 100, -1); }
     }
