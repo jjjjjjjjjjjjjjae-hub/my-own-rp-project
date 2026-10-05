@@ -2,176 +2,300 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0B1220"
-    android:fillViewport="true">
+    android:background="#07111F"
+    android:fillViewport="true"
+    android:overScrollMode="never">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ALMAS NET OPTIMIZER MAX v3"
-            android:textColor="#FFFFFF"
-            android:textSize="23sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="2 режим: Hotspot Telecom + Phone Analyzer"
-            android:textColor="#94A3B8"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvHotspot"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:background="#162033"
-            android:padding="16dp"
-            android:text="📡 HOTSPOT TELECOM\nХотспотқа адам қосылса, әр клиентке берілетін Mbps лимитін таңдайсың."
-            android:textColor="#E5E7EB"
-            android:textSize="16sp" />
+            android:background="@drawable/bg_telekom_hero"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnHotspot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="📡 HOTSPOT TELECOM — Mbps БЕРУ" />
+            <ImageView
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:contentDescription="ALMAS TELEKOM"
+                android:padding="5dp"
+                android:src="@drawable/ic_almas_telekom" />
 
-        <Button
-            android:id="@+id/btnHotspotOff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="HOTSPOT ЛИМИТІН АЛУ" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.06"
+                    android:text="ALMAS TELEKOM"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Smart Network Control • v4"
+                    android:textColor="#D9FFF5"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="#26000000"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="5G  •  HOTSPOT  •  ANALYZER"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tvAnalyzer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="#162033"
-            android:padding="16dp"
-            android:text="📱 PHONE ANALYZER\nЖелі анализі іске қосылуда..."
-            android:textColor="#E5E7EB"
-            android:textSize="16sp" />
+            android:text="ЖЕЛІ БАСҚАРУ"
+            android:textColor="#7993AE"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnAnalyzer"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="📊 АНАЛИЗДІ ҚАЗІР ЖАҢАРТУ" />
+            android:background="@drawable/bg_telekom_card"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnAccessibility"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📡  Hotspot Telecom"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvHotspot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Хотспот клиенттерін анықтайды және әр адамға берілетін жылдамдықты басқарады."
+                android:textColor="#B8C8D9"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btnHotspot"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="14dp"
+                android:backgroundTint="#19D3AE"
+                android:text="КЛИЕНТ ЖЫЛДАМДЫҒЫН ОРНАТУ"
+                android:textColor="#041915"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnHotspotOff"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:backgroundTint="#1B2C40"
+                android:text="ЛИМИТТІ ӨШІРУ"
+                android:textColor="#D7E4F2" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="⚠ ВИДЕО САПАСЫН ЕСКЕРТУ — ACCESSIBILITY" />
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_telekom_card"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📱  Phone Analyzer"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvAnalyzer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Желі сапасын талдап, тұрақты видео сапасын болжайды."
+                android:textColor="#B8C8D9"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btnAnalyzer"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="14dp"
+                android:backgroundTint="#1597FF"
+                android:text="АНАЛИЗДІ ҚАЗІР ЖАҢАРТУ"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAccessibility"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:backgroundTint="#1B2C40"
+                android:text="ВИДЕО САПАСЫ ЕСКЕРТУІ"
+                android:textColor="#D7E4F2" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Accessibility рұқсаты сапа мәзіріндегі 260p/360p/480p/720p/1080p сияқты таңдауларды танып, интернет көтермесе ескерту көрсетуге қолданылады."
+                android:textColor="#7890A8"
+                android:textSize="12sp" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="ЖЕЛІ ДИАГНОСТИКАСЫ"
+            android:textColor="#7993AE"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Accessibility тек сапа мәзіріндегі басылған 260p/360p/480p/720p/1080p сияқты мәтінді тану үшін керек. Жоғары сапа интернет мүмкіндігінен асса ескерту шығады."
-            android:textColor="#94A3B8"
+            android:background="@drawable/bg_telekom_card"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNetwork"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Желі тексерілуде..."
+                android:textColor="#EAF3FC"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Network Score: --/100"
+                android:textColor="#37E6BB"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvTest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Ping: -- ms\nJitter: -- ms\nLoss: --%\nDownload: -- Mbps"
+                android:textColor="#B8C8D9"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btnTest"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="14dp"
+                android:backgroundTint="#19D3AE"
+                android:text="ИНТЕРНЕТТІ ТОЛЫҚ ТЕКСЕРУ"
+                android:textColor="#041915"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnSignal"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:backgroundTint="#1B2C40"
+                android:text="СИГНАЛДЫ ЖАҢАРТУ"
+                android:textColor="#D7E4F2" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="ОПЕРАТОР / APN"
+            android:textColor="#7993AE"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_telekom_card"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvApn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="APN: Root арқылы тексеруге және оңтайландыруға болады."
+                android:textColor="#D7E4F2"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btnApn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="#1B2C40"
+                android:text="ROOT APN ТЕКСЕРУ"
+                android:textColor="#D7E4F2" />
+
+            <Button
+                android:id="@+id/btnMaxApn"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="6dp"
+                android:backgroundTint="#1597FF"
+                android:text="MAX APN AUTO (ROOT)"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnRestoreApn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:backgroundTint="#1B2C40"
+                android:text="APN BACKUP ҚАЙТАРУ"
+                android:textColor="#D7E4F2" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:text="ALMAS TELEKOM • Network Intelligence"
+            android:textColor="#536B83"
             android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tvNetwork"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:background="#162033"
-            android:padding="16dp"
-            android:text="Желі тексерілуде..."
-            android:textColor="#E5E7EB"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/tvScore"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:background="#162033"
-            android:padding="16dp"
-            android:text="Network Score: --/100"
-            android:textColor="#7CFFB2"
-            android:textSize="21sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvTest"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:background="#162033"
-            android:padding="16dp"
-            android:text="Ping: -- ms\nJitter: -- ms\nLoss: --%\nDownload: -- Mbps"
-            android:textColor="#E5E7EB"
-            android:textSize="17sp" />
-
-        <Button
-            android:id="@+id/btnTest"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:text="ИНТЕРНЕТТІ ТОЛЫҚ ТЕКСЕРУ" />
-
-        <Button
-            android:id="@+id/btnSignal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="СИГНАЛДЫ ЖАҢАРТУ" />
-
-        <TextView
-            android:id="@+id/tvApn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:background="#162033"
-            android:padding="16dp"
-            android:text="APN: Root арқылы тексеруге және оңтайландыруға болады."
-            android:textColor="#E5E7EB"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/btnApn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="ROOT APN ТЕКСЕРУ" />
-
-        <Button
-            android:id="@+id/btnMaxApn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="⚡ MAX APN AUTO (ROOT)" />
-
-        <Button
-            android:id="@+id/btnRestoreApn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="APN BACKUP ҚАЙТАРУ" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Hotspot Telecom: tc/HTB қолдауы бар root kernel-де клиенттің download және upload жылдамдығын шектейді. Phone Analyzer: шағын тесттер арқылы тұрақты жылдамдықты, jitter және loss-ты есептеп, видео сапасын болжайды."
-            android:textColor="#94A3B8"
-            android:textSize="13sp" />
 
     </LinearLayout>
 </ScrollView>
