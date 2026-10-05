@@ -11,7 +11,8 @@
 
     <application
         android:allowBackup="true"
-        android:label="Almas Net Optimizer MAX"
+        android:icon="@drawable/ic_almas_telekom"
+        android:label="ALMAS TELEKOM"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="false">
 
