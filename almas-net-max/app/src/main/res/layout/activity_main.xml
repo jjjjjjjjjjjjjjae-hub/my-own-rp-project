@@ -14,10 +14,76 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ALMAS NET OPTIMIZER MAX"
+            android:text="ALMAS NET OPTIMIZER MAX v3"
             android:textColor="#FFFFFF"
             android:textSize="23sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="2 режим: Hotspot Telecom + Phone Analyzer"
+            android:textColor="#94A3B8"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvHotspot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="#162033"
+            android:padding="16dp"
+            android:text="📡 HOTSPOT TELECOM\nХотспотқа адам қосылса, әр клиентке берілетін Mbps лимитін таңдайсың."
+            android:textColor="#E5E7EB"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnHotspot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="📡 HOTSPOT TELECOM — Mbps БЕРУ" />
+
+        <Button
+            android:id="@+id/btnHotspotOff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="HOTSPOT ЛИМИТІН АЛУ" />
+
+        <TextView
+            android:id="@+id/tvAnalyzer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#162033"
+            android:padding="16dp"
+            android:text="📱 PHONE ANALYZER\nЖелі анализі іске қосылуда..."
+            android:textColor="#E5E7EB"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnAnalyzer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="📊 АНАЛИЗДІ ҚАЗІР ЖАҢАРТУ" />
+
+        <Button
+            android:id="@+id/btnAccessibility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="⚠ ВИДЕО САПАСЫН ЕСКЕРТУ — ACCESSIBILITY" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Accessibility тек сапа мәзіріндегі басылған 260p/360p/480p/720p/1080p сияқты мәтінді тану үшін керек. Жоғары сапа интернет мүмкіндігінен асса ескерту шығады."
+            android:textColor="#94A3B8"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tvNetwork"
@@ -103,7 +169,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="MAX режимі оператордағы жарамды APN профильдерін тестілейді. Ping, jitter, loss және шағын download тесті бойынша ең тұрақтысын қалдырады. Өзгеріс алдында backup сақталады. APN радиосигнал күшін көтермейді."
+            android:text="Hotspot Telecom: tc/HTB қолдауы бар root kernel-де клиенттің download және upload жылдамдығын шектейді. Phone Analyzer: шағын тесттер арқылы тұрақты жылдамдықты, jitter және loss-ты есептеп, видео сапасын болжайды."
             android:textColor="#94A3B8"
             android:textSize="13sp" />
 
