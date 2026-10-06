@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_splash"
+    android:fitsSystemWindows="true">
+
+    <View
+        android:id="@+id/ringOuter"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_splash_ring_outer" />
+
+    <View
+        android:id="@+id/ringInner"
+        android:layout_width="188dp"
+        android:layout_height="188dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_splash_ring_inner" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="28dp"
+        android:paddingRight="28dp">
+
+        <ImageView
+            android:id="@+id/splashLogo"
+            android:layout_width="108dp"
+            android:layout_height="108dp"
+            android:contentDescription="ALMAS TELEKOM"
+            android:src="@drawable/ic_almas_telekom" />
+
+        <TextView
+            android:id="@+id/splashTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:letterSpacing="0.12"
+            android:text="ALMAS TELEKOM"
+            android:textColor="#FFFFFF"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/splashSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:letterSpacing="0.05"
+            android:text="SMART NETWORK CONTROL"
+            android:textColor="#8FEBD9"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:layout_width="210dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="34dp"
+            android:background="@drawable/bg_splash_track">
+
+            <View
+                android:id="@+id/progressLine"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_splash_progress" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="v7 • CONNECTING"
+            android:textColor="#607B94"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</FrameLayout>
