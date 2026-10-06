@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
     private int bestDbmSeen = -140;
     private boolean hotspotDialogOpen = false;
     private String lastPromptSignature = "";
+    private AppUpdateManager updateManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class MainActivity extends Activity {
         tvHotspot = findViewById(R.id.tvHotspot);
         tvAnalyzer = findViewById(R.id.tvAnalyzer);
 
+        Button btnUpdate = findViewById(R.id.btnUpdate);
         Button btnHotspot = findViewById(R.id.btnHotspot);
         Button btnHotspotOff = findViewById(R.id.btnHotspotOff);
         Button btnAnalyzer = findViewById(R.id.btnAnalyzer);
@@ -82,6 +84,8 @@ public class MainActivity extends Activity {
         Button btnMaxApn = findViewById(R.id.btnMaxApn);
         Button btnRestoreApn = findViewById(R.id.btnRestoreApn);
 
+        updateManager = new AppUpdateManager(this);
+        btnUpdate.setOnClickListener(v -> updateManager.checkForUpdates(true));
         btnHotspot.setOnClickListener(v -> promptHotspotLimit(false));
         btnHotspotOff.setOnClickListener(v -> removeHotspotLimit());
         btnAnalyzer.setOnClickListener(v -> runAnalyzerNow());
@@ -106,6 +110,7 @@ public class MainActivity extends Activity {
         refreshSignal();
         startGuardianService();
         refreshAnalyzerCard();
+        updateManager.checkForUpdates(false);
     }
 
     @Override
@@ -113,6 +118,14 @@ public class MainActivity extends Activity {
         super.onResume();
         refreshAnalyzerCard();
         checkHotspotAndPrompt();
+        if (updateManager != null) updateManager.resumePendingInstall();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (updateManager != null) updateManager.destroy();
+        pool.shutdownNow();
+        super.onDestroy();
     }
 
     private void requestNeededPermissions() {
