@@ -1,8 +1,8 @@
 {
-  "versionCode": 6,
-  "versionName": "6.0",
-  "apkUrl": "https://raw.githubusercontent.com/jjjjjjjjjjjjjjae-hub/my-own-rp-project/main/generated/ALMAS-TELEKOM-v6.apk",
-  "sha256": "ca8cef014e75e91d9460295744d9c7add45512389ea81ed11a71f913f51a4f26",
-  "signedRelease": false,
-  "notes": "ALMAS TELEKOM v6.0: әр қосылған құрылғы жеке көрсетіледі. Әр ноутбук/телефонға бөлек Download және Upload Mbps лимитін орнатуға болады."
+  "versionCode": 7,
+  "versionName": "7.0",
+  "apkUrl": "https://raw.githubusercontent.com/jjjjjjjjjjjjjjae-hub/my-own-rp-project/main/generated/ALMAS-TELEKOM-v7.apk",
+  "sha256": "9f47a37806d450bfe0a53b1d7f3e02f1acd917949ce80c3e3691a6c7fbfb0e2b",
+  "signedRelease": true,
+  "notes": "ALMAS TELEKOM v7.0: кірген кезде жаңа әдемі splash-анимация қосылды — логотип zoom/айналу, glow/pulse, атау fade-in және loading line."
 }
