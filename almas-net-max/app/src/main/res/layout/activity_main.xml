@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Smart Network Control • v5"
+                    android:text="Smart Network Control • v6"
                     android:textColor="#D9FFF5"
                     android:textSize="13sp" />
 
@@ -129,7 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Хотспот клиенттерін анықтайды және әр адамға берілетін жылдамдықты басқарады."
+                android:text="Қосылған ноутбук/телефондарды жеке көрсетеді. Әр құрылғыға бөлек Download және Upload Mbps орнатуға болады."
                 android:textColor="#B8C8D9"
                 android:textSize="15sp" />
 
@@ -139,7 +139,7 @@
                 android:layout_height="52dp"
                 android:layout_marginTop="14dp"
                 android:backgroundTint="#19D3AE"
-                android:text="КЛИЕНТ ЖЫЛДАМДЫҒЫН ОРНАТУ"
+                android:text="ӘР ҚҰРЫЛҒЫНЫ ЖЕКЕ БАСҚАРУ"
                 android:textColor="#041915"
                 android:textStyle="bold" />
 
