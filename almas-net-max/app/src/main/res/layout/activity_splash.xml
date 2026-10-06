@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             android:letterSpacing="0.08"
-            android:text="SECURE LINK  •  v8"
+            android:text="SECURE LINK  •  v9"
             android:textColor="#456278"
             android:textSize="9sp"
             android:textStyle="bold" />
