@@ -4,5 +4,5 @@
   "apkUrl": "https://raw.githubusercontent.com/jjjjjjjjjjjjjjae-hub/my-own-rp-project/main/generated/ALMAS-TELEKOM-v6.apk",
   "sha256": "ca8cef014e75e91d9460295744d9c7add45512389ea81ed11a71f913f51a4f26",
   "signedRelease": false,
-  "notes": "ALMAS TELEKOM v6.0: нақты Auto Update Engine қосылды. Қолданба жаңа нұсқаны өзі тексереді, APK-ны жүктейді және Android орнатқышын ашады."
+  "notes": "ALMAS TELEKOM v6.0: әр қосылған құрылғы жеке көрсетіледі. Әр ноутбук/телефонға бөлек Download және Upload Mbps лимитін орнатуға болады."
 }
