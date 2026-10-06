@@ -20,36 +20,40 @@ jobs:
       ALMAS_KEY_PASSWORD: ${{ secrets.ALMAS_KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
-      - name: Prepare signing key
+      - name: Require one stable signing key
         shell: bash
         run: |
-          if [ -n "$ALMAS_SIGNING_KEY_B64" ]; then
-            echo "$ALMAS_SIGNING_KEY_B64" | base64 -d > "$RUNNER_TEMP/almas-release.jks"
-            echo "ALMAS_KEYSTORE_PATH=$RUNNER_TEMP/almas-release.jks" >> "$GITHUB_ENV"
-            echo "ALMAS_SIGNED_RELEASE=true" >> "$GITHUB_ENV"
-          else
-            echo "ALMAS_SIGNED_RELEASE=false" >> "$GITHUB_ENV"
+          if [ -z "$ALMAS_SIGNING_KEY_B64" ] || \
+             [ -z "$ALMAS_KEYSTORE_PASSWORD" ] || \
+             [ -z "$ALMAS_KEY_ALIAS" ] || \
+             [ -z "$ALMAS_KEY_PASSWORD" ]; then
+            echo "::error::Stable ALMAS TELEKOM signing secrets are missing."
+            echo "::error::Refusing to publish a debug-signed APK because it would break Auto Update."
+            exit 1
           fi
 
-      - name: Build APK
+      - name: Prepare stable release signing key
         shell: bash
         run: |
-          if [ "$ALMAS_SIGNED_RELEASE" = "true" ]; then
-            gradle -p almas-net-max assembleRelease --stacktrace
-            echo "APK_PATH=almas-net-max/app/build/outputs/apk/release/app-release.apk" >> "$GITHUB_ENV"
-          else
-            echo "WARNING: release signing secrets are missing; building debug APK."
-            gradle -p almas-net-max assembleDebug --stacktrace
-            echo "APK_PATH=almas-net-max/app/build/outputs/apk/debug/app-debug.apk" >> "$GITHUB_ENV"
-          fi
+          echo "$ALMAS_SIGNING_KEY_B64" | base64 -d > "$RUNNER_TEMP/almas-release.jks"
+          echo "ALMAS_KEYSTORE_PATH=$RUNNER_TEMP/almas-release.jks" >> "$GITHUB_ENV"
+          echo "ALMAS_SIGNED_RELEASE=true" >> "$GITHUB_ENV"
+
+      - name: Build signed release APK
+        shell: bash
+        run: |
+          gradle -p almas-net-max assembleRelease --stacktrace
+          echo "APK_PATH=almas-net-max/app/build/outputs/apk/release/app-release.apk" >> "$GITHUB_ENV"
 
       - name: Export APK and update manifest
         shell: bash
@@ -68,18 +72,18 @@ jobs:
             "versionName": "${VERSION_NAME}",
             "apkUrl": "https://raw.githubusercontent.com/jjjjjjjjjjjjjjae-hub/my-own-rp-project/main/generated/${APK_NAME}",
             "sha256": "${SHA256}",
-            "signedRelease": ${ALMAS_SIGNED_RELEASE},
-            "notes": "ALMAS TELEKOM v${VERSION_NAME}: нақты Auto Update Engine қосылды. Қолданба жаңа нұсқаны өзі тексереді, APK-ны жүктейді және Android орнатқышын ашады."
+            "signedRelease": true,
+            "notes": "ALMAS TELEKOM v${VERSION_NAME}: әр қосылған құрылғы жеке көрсетіледі және әрқайсысына бөлек Download/Upload Mbps лимитін орнатуға болады."
           }
           EOF
 
           echo "APK_NAME=$APK_NAME" >> "$GITHUB_ENV"
 
-      - name: Commit direct APK and update manifest
+      - name: Commit signed APK and update manifest
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "generated/$APK_NAME" generated/almas-telekom-update.json
-          git commit -m "Publish ALMAS TELEKOM v5 auto-update APK" || exit 0
+          git commit -m "Publish signed ALMAS TELEKOM v$APK_NAME" || exit 0
           git push
