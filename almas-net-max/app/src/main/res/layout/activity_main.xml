@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Smart Network Control • v4"
+                    android:text="Smart Network Control • v5"
                     android:textColor="#D9FFF5"
                     android:textSize="13sp" />
 
@@ -64,6 +64,40 @@
                     android:textSize="11sp"
                     android:textStyle="bold" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_telekom_card"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🔄  Auto Update"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Жаңа нұсқа шықса ALMAS TELEKOM өзі тексеріп, APK-ны жүктеп, Android орнатқышын ашады."
+                android:textColor="#B8C8D9"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="#19D3AE"
+                android:text="ЖАҢАРТУДЫ ТЕКСЕРУ"
+                android:textColor="#041915"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
