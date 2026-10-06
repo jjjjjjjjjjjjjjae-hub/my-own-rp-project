@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_splash"
+    android:fitsSystemWindows="true">
+
+    <kz.almas.netoptimizer.NetworkSplashView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        android:letterSpacing="0.14"
+        android:text="ALMAS NETWORK CORE"
+        android:textColor="#55768D"
+        android:textSize="9sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/ringOuter"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="82dp"
+        android:background="@drawable/bg_splash_ring_outer" />
+
+    <View
+        android:id="@+id/ringInner"
+        android:layout_width="184dp"
+        android:layout_height="184dp"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="115dp"
+        android:background="@drawable/bg_splash_ring_inner" />
+
+    <ImageView
+        android:id="@+id/splashLogo"
+        android:layout_width="106dp"
+        android:layout_height="106dp"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="154dp"
+        android:contentDescription="ALMAS TELEKOM"
+        android:elevation="12dp"
+        android:src="@drawable/ic_almas_telekom" />
+
+    <LinearLayout
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="48dp"
+        android:gravity="start"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/splashTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.13"
+            android:text="ALMAS TELEKOM"
+            android:textColor="#FFFFFF"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/splashSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:letterSpacing="0.08"
+            android:text="SMART NETWORK CONTROL"
+            android:textColor="#8FEBD9"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/splashStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:letterSpacing="0.07"
+            android:text="INITIALIZING NETWORK CORE"
+            android:textColor="#78A5BC"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/splashOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-13dp"
+            android:background="@drawable/bg_online_badge"
+            android:letterSpacing="0.08"
+            android:paddingLeft="14dp"
+            android:paddingTop="6dp"
+            android:paddingRight="14dp"
+            android:paddingBottom="6dp"
+            android:text="●  ALMAS TELEKOM • ONLINE"
+            android:textColor="#B7FFE9"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:layout_width="280dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_splash_track">
+
+            <View
+                android:id="@+id/progressLine"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_splash_progress" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:letterSpacing="0.08"
+            android:text="SECURE LINK  •  v9"
+            android:textColor="#456278"
+            android:textSize="9sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="20dp"
+        android:letterSpacing="0.08"
+        android:text="NETWORK INTELLIGENCE SYSTEM"
+        android:textColor="#3C596E"
+        android:textSize="8sp"
+        android:textStyle="bold" />
+
+</FrameLayout>
