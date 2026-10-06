@@ -663,8 +663,6 @@ public class MainActivity extends Activity {
     private String shortError(String s) { if (s == null) return ""; s = s.trim(); return s.length() > 220 ? s.substring(0, 220) : s; }
     private void setApnText(String text) { runOnUiThread(() -> tvApn.setText(text)); }
 
-    @Override
-    protected void onDestroy() { super.onDestroy(); pool.shutdownNow(); }
 
     private static class HotspotState {
         final String iface; final List<String> clients;
