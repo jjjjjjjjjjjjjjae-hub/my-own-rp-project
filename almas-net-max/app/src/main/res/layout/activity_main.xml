@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Smart Network Control • v6"
+                    android:text="Smart Network Control • v7"
                     android:textColor="#D9FFF5"
                     android:textSize="13sp" />
 
