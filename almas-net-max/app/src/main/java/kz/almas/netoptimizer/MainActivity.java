@@ -26,6 +26,8 @@ import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +54,9 @@ public class MainActivity extends Activity {
     static final String KEY_RECOMMENDED_QUALITY = "recommended_quality";
     static final String KEY_LAST_MBPS = "last_mbps";
     private static final String KEY_HOTSPOT_LIMIT = "hotspot_limit_mbps";
+    private static final String KEY_CLIENT_DOWN_PREFIX = "client_down_";
+    private static final String KEY_CLIENT_UP_PREFIX = "client_up_";
+    private static final String KEY_CLIENT_NAME_PREFIX = "client_name_";
 
     private TextView tvNetwork, tvScore, tvTest, tvApn, tvHotspot, tvAnalyzer;
     private final ExecutorService pool = Executors.newSingleThreadExecutor();
@@ -221,7 +226,7 @@ public class MainActivity extends Activity {
             if (!isCellularActive()) return;
             HotspotState hs = findHotspotState();
             if (hs == null || hs.clients.isEmpty()) return;
-            String signature = hs.iface + ":" + hs.clients.toString();
+            String signature = hs.signature();
             if (signature.equals(lastPromptSignature)) return;
             lastPromptSignature = signature;
             runOnUiThread(() -> promptHotspotLimit(true));
@@ -236,65 +241,157 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> {
                 if (hs == null || hs.clients.isEmpty()) {
                     hotspotDialogOpen = false;
-                    tvHotspot.setText("📡 HOTSPOT TELECOM\nҚосылған hotspot клиенттері табылмады. Хотспотты қосып, адамды қосқаннан кейін қайта бас.");
+                    tvHotspot.setText("📡 HOTSPOT TELEKOM\nҚосылған құрылғы табылмады. Хотспотты қосып, ноутбук/телефонды жалғап қайта бас.");
                     if (!automatic) Toast.makeText(this, "Hotspot клиенті табылмады", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                EditText input = new EditText(this);
-                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                float old = getSharedPreferences(PREFS, MODE_PRIVATE).getFloat(KEY_HOTSPOT_LIMIT, 5f);
-                input.setText(String.format(Locale.US, "%.1f", old));
-                input.setSelectAllOnFocus(true);
+                SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
+                ScrollView scroll = new ScrollView(this);
+                LinearLayout box = new LinearLayout(this);
+                box.setOrientation(LinearLayout.VERTICAL);
+                int pad = dp(14);
+                box.setPadding(pad, pad, pad, pad);
+                scroll.addView(box);
+
+                List<ClientEditor> editors = new ArrayList<>();
+                int number = 1;
+                for (HotspotClient client : hs.clients) {
+                    String key = clientKey(client);
+                    String savedName = sp.getString(KEY_CLIENT_NAME_PREFIX + key, "");
+                    float fallback = sp.getFloat(KEY_HOTSPOT_LIMIT, 5f);
+                    float savedDown = sp.getFloat(KEY_CLIENT_DOWN_PREFIX + key, fallback);
+                    float savedUp = sp.getFloat(KEY_CLIENT_UP_PREFIX + key, fallback);
+
+                    TextView title = new TextView(this);
+                    title.setText(number + ". " + client.suggestedName()
+                            + "\nIP: " + client.ip
+                            + "\nMAC: " + (empty(client.mac) ? "—" : client.mac));
+                    title.setTextColor(0xFFFFFFFF);
+                    title.setTextSize(16);
+                    title.setPadding(0, number == 1 ? 0 : dp(14), 0, dp(4));
+                    box.addView(title);
+
+                    EditText name = new EditText(this);
+                    name.setSingleLine(true);
+                    name.setHint("Құрылғы атауы / ноутбук моделі");
+                    name.setText(empty(savedName) ? client.suggestedName() : savedName);
+                    box.addView(name);
+
+                    EditText down = new EditText(this);
+                    down.setSingleLine(true);
+                    down.setHint("Download Mbps • 0 = шектеусіз");
+                    down.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    down.setText(String.format(Locale.US, "%.1f", savedDown));
+                    box.addView(down);
+
+                    EditText up = new EditText(this);
+                    up.setSingleLine(true);
+                    up.setHint("Upload Mbps • 0 = шектеусіз");
+                    up.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    up.setText(String.format(Locale.US, "%.1f", savedUp));
+                    box.addView(up);
+
+                    editors.add(new ClientEditor(client, name, down, up));
+                    number++;
+                }
 
                 new AlertDialog.Builder(this)
-                        .setTitle("📡 Hotspot Telecom")
-                        .setMessage("Қосылған адам саны: " + hs.clients.size()
-                                + "\nИнтерфейс: " + hs.iface
-                                + "\n\nӘР АДАМҒА қанша Mbps берейін?\nМысалы: 3 = әр клиентке 3 Mbps")
-                        .setView(input)
+                        .setTitle("📡 " + hs.clients.size() + " құрылғы • жеке Mbps")
+                        .setMessage("Әр ноутбук/телефонға Download және Upload жылдамдығын бөлек қой. 0 = шектеусіз.")
+                        .setView(scroll)
                         .setPositiveButton("ҚОЛДАНУ", (d, w) -> {
                             hotspotDialogOpen = false;
-                            double mbps;
-                            try { mbps = Double.parseDouble(input.getText().toString().replace(',', '.')); }
-                            catch (Exception e) { mbps = 0; }
-                            if (mbps < 0.2 || mbps > 500) {
-                                Toast.makeText(this, "0.2–500 Mbps аралығын жаз", Toast.LENGTH_LONG).show();
-                                return;
+                            List<ClientLimit> limits = new ArrayList<>();
+                            for (ClientEditor editor : editors) {
+                                double down = parseClientLimit(editor.down.getText().toString());
+                                double up = parseClientLimit(editor.up.getText().toString());
+                                if (down < 0 || up < 0) {
+                                    Toast.makeText(this, "Mbps 0–500 аралығында болуы керек", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                String name = editor.name.getText().toString().trim();
+                                if (empty(name)) name = editor.client.suggestedName();
+                                limits.add(new ClientLimit(editor.client, name, down, up));
                             }
-                            applyHotspotLimit(hs, mbps);
+                            applyHotspotLimits(hs, limits);
                         })
-                        .setNegativeButton("БАС ТАРТУ", (d, w) -> hotspotDialogOpen = false)
+                        .setNegativeButton("ЖАБУ", (d, w) -> hotspotDialogOpen = false)
                         .setOnCancelListener(d -> hotspotDialogOpen = false)
                         .show();
             });
         });
     }
 
+    private double parseClientLimit(String raw) {
+        try {
+            double value = Double.parseDouble(raw.trim().replace(',', '.'));
+            if (value < 0 || value > 500) return -1;
+            return value;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
     private HotspotState findHotspotState() {
         CmdResult r = root("ip neigh show 2>/dev/null");
         if (!r.ok() || empty(r.output)) return null;
-        Map<String, List<String>> byIface = new LinkedHashMap<>();
+
+        Map<String, String> names = readHotspotNames();
+        Map<String, List<HotspotClient>> byIface = new LinkedHashMap<>();
+
         for (String line : r.output.split("\\r?\\n")) {
             String[] p = line.trim().split("\\s+");
             if (p.length < 3) continue;
             String ip = p[0];
             if (!isPrivateIpv4(ip)) continue;
+
             String iface = "";
-            for (int i = 0; i < p.length - 1; i++) if ("dev".equals(p[i])) { iface = p[i + 1]; break; }
-            if (empty(iface) || isUpstreamIface(iface)) continue;
-            if (!line.contains("lladdr")) continue;
-            byIface.computeIfAbsent(iface, k -> new ArrayList<>()).add(ip);
+            String mac = "";
+            for (int i = 0; i < p.length - 1; i++) {
+                if ("dev".equals(p[i])) iface = p[i + 1];
+                if ("lladdr".equals(p[i])) mac = p[i + 1].toLowerCase(Locale.US);
+            }
+
+            if (empty(iface) || isUpstreamIface(iface) || empty(mac)) continue;
+            String hostname = names.get(ip);
+            if (empty(hostname)) hostname = names.get(mac);
+
+            byIface.computeIfAbsent(iface, k -> new ArrayList<>())
+                    .add(new HotspotClient(ip, mac, hostname));
         }
+
         String bestIface = null;
-        List<String> best = null;
-        for (Map.Entry<String, List<String>> e : byIface.entrySet()) {
+        List<HotspotClient> best = null;
+        for (Map.Entry<String, List<HotspotClient>> e : byIface.entrySet()) {
             if (best == null || e.getValue().size() > best.size()) {
                 bestIface = e.getKey();
                 best = e.getValue();
             }
         }
         return best == null ? null : new HotspotState(bestIface, best);
+    }
+
+    private Map<String, String> readHotspotNames() {
+        Map<String, String> out = new LinkedHashMap<>();
+        String cmd = "for f in /data/misc/dhcp/dnsmasq.leases " +
+                "/data/misc/apexdata/com.android.tethering/dnsmasq.leases " +
+                "/data/vendor/dhcp/dnsmasq.leases /data/misc/dhcp/*.leases; do " +
+                "[ -r \\"$f\\" ] && cat \\"$f\\"; done 2>/dev/null";
+        CmdResult leases = root(cmd);
+        if (!leases.ok() || empty(leases.output)) return out;
+
+        for (String line : leases.output.split("\\r?\\n")) {
+            String[] p = line.trim().split("\\s+");
+            if (p.length < 4) continue;
+            String mac = p[1].toLowerCase(Locale.US);
+            String ip = p[2];
+            String host = p[3];
+            if ("*".equals(host) || empty(host)) continue;
+            out.put(ip, host);
+            out.put(mac, host);
+        }
+        return out;
     }
 
     private boolean isPrivateIpv4(String ip) {
@@ -310,21 +407,23 @@ public class MainActivity extends Activity {
                 s.startsWith("ip6") || s.startsWith("sit") || s.startsWith("bond");
     }
 
-    private void applyHotspotLimit(HotspotState hs, double mbps) {
-        tvHotspot.setText("📡 HOTSPOT TELECOM\nЛимит қолданылуда... Root рұқсатын бер.");
+    private void applyHotspotLimits(HotspotState hs, List<ClientLimit> limits) {
+        tvHotspot.setText("📡 HOTSPOT TELEKOM\nЖеке лимиттер қолданылуда... Root рұқсатын бер.");
         pool.execute(() -> {
             if (!hs.iface.matches("[A-Za-z0-9_.-]+")) {
                 setHotspotText("Қауіпсіздік тексерісі: hotspot интерфейсі жарамсыз.");
                 return;
             }
+
             CmdResult id = root("id");
             if (!id.ok() || !id.output.contains("uid=0")) {
                 setHotspotText("Root рұқсаты жоқ. Magisk сұранысына Allow бер.");
                 return;
             }
+
             CmdResult tcCheck = root("command -v tc || which tc || ls /system/bin/tc 2>/dev/null");
             if (!tcCheck.ok() || empty(tcCheck.output)) {
-                setHotspotText("Бұл ROM/kernel ішінде tc жоқ. Hotspot жылдамдығын ядро деңгейінде шектеу мүмкін емес.");
+                setHotspotText("Бұл ROM/kernel ішінде tc жоқ. Әр құрылғының жылдамдығын шектеу мүмкін емес.");
                 return;
             }
 
@@ -334,33 +433,73 @@ public class MainActivity extends Activity {
                     "tc class add dev " + dev + " parent 1: classid 1:1 htb rate 1000mbit ceil 1000mbit && " +
                     "tc class add dev " + dev + " parent 1:1 classid 1:999 htb rate 1000mbit ceil 1000mbit && " +
                     "tc qdisc add dev " + dev + " handle ffff: ingress");
+
             if (!base.ok()) {
                 setHotspotText("tc HTB іске қосылмады. Kernel HTB/ingress қолдауын тексер.\n" + shortError(base.output));
                 return;
             }
 
+            SharedPreferences.Editor prefs = getSharedPreferences(PREFS, MODE_PRIVATE).edit();
+            StringBuilder status = new StringBuilder("✅ ЖЕКЕ ЖЫЛДАМДЫҚ ҚОСУЛЫ\n");
             int minor = 10;
-            int okDown = 0;
-            int okUp = 0;
-            String rate = String.format(Locale.US, "%.3fmbit", mbps);
-            for (String ip : hs.clients) {
-                if (!isPrivateIpv4(ip)) continue;
-                int idNum = minor++;
-                CmdResult down = root("tc class add dev " + dev + " parent 1:1 classid 1:" + idNum +
-                        " htb rate " + rate + " ceil " + rate + " burst 64k && " +
-                        "tc filter add dev " + dev + " protocol ip parent 1: prio 1 u32 match ip dst " + ip + "/32 flowid 1:" + idNum);
-                if (down.ok()) okDown++;
+            int applied = 0;
 
-                CmdResult up = root("tc filter add dev " + dev + " parent ffff: protocol ip prio 1 u32 match ip src " + ip +
-                        "/32 police rate " + rate + " burst 128k drop flowid :1");
-                if (up.ok()) okUp++;
+            for (ClientLimit limit : limits) {
+                HotspotClient client = limit.client;
+                if (!isPrivateIpv4(client.ip)) continue;
+
+                int idNum = minor++;
+                boolean downOk = true;
+                boolean upOk = true;
+
+                if (limit.downMbps > 0) {
+                    String downRate = String.format(Locale.US, "%.3fmbit", limit.downMbps);
+                    CmdResult down = root("tc class add dev " + dev + " parent 1:1 classid 1:" + idNum +
+                            " htb rate " + downRate + " ceil " + downRate + " burst 64k && " +
+                            "tc filter add dev " + dev + " protocol ip parent 1: prio 1 u32 match ip dst " +
+                            client.ip + "/32 flowid 1:" + idNum);
+                    downOk = down.ok();
+                }
+
+                if (limit.upMbps > 0) {
+                    String upRate = String.format(Locale.US, "%.3fmbit", limit.upMbps);
+                    CmdResult up = root("tc filter add dev " + dev +
+                            " parent ffff: protocol ip prio 1 u32 match ip src " + client.ip +
+                            "/32 police rate " + upRate + " burst 128k drop flowid :1");
+                    upOk = up.ok();
+                }
+
+                String key = clientKey(client);
+                prefs.putString(KEY_CLIENT_NAME_PREFIX + key, limit.name);
+                prefs.putFloat(KEY_CLIENT_DOWN_PREFIX + key, (float) limit.downMbps);
+                prefs.putFloat(KEY_CLIENT_UP_PREFIX + key, (float) limit.upMbps);
+
+                status.append("\n").append(limit.name)
+                        .append("\n↓ ").append(formatLimit(limit.downMbps))
+                        .append(" Mbps  •  ↑ ").append(formatLimit(limit.upMbps)).append(" Mbps");
+                if (!downOk || !upOk) status.append("  ⚠");
+                else applied++;
             }
 
-            getSharedPreferences(PREFS, MODE_PRIVATE).edit().putFloat(KEY_HOTSPOT_LIMIT, (float) mbps).apply();
-            setHotspotText(String.format(Locale.US,
-                    "✅ HOTSPOT TELECOM ҚОСУЛЫ\nКлиент: %d\nӘр адамға: %.1f Mbps\nDownload лимиті: %d/%d\nUpload лимиті: %d/%d\nИнтерфейс: %s",
-                    hs.clients.size(), mbps, okDown, hs.clients.size(), okUp, hs.clients.size(), dev));
+            prefs.apply();
+            status.append("\n\nҚұрылғы: ").append(limits.size())
+                    .append(" • қолданылды: ").append(applied)
+                    .append("\nИнтерфейс: ").append(dev);
+            setHotspotText(status.toString());
         });
+    }
+
+    private String formatLimit(double value) {
+        return value <= 0 ? "∞" : String.format(Locale.US, "%.1f", value);
+    }
+
+    private String clientKey(HotspotClient client) {
+        String raw = empty(client.mac) ? client.ip : client.mac;
+        return raw.replace(":", "_").replace(".", "_");
+    }
+
+    private int dp(int value) {
+        return (int) (value * getResources().getDisplayMetrics().density + 0.5f);
     }
 
     private void removeHotspotLimit() {
@@ -665,8 +804,68 @@ public class MainActivity extends Activity {
 
 
     private static class HotspotState {
-        final String iface; final List<String> clients;
-        HotspotState(String iface, List<String> clients) { this.iface = iface; this.clients = clients; }
+        final String iface;
+        final List<HotspotClient> clients;
+        HotspotState(String iface, List<HotspotClient> clients) {
+            this.iface = iface;
+            this.clients = clients;
+        }
+        String signature() {
+            StringBuilder s = new StringBuilder(iface);
+            for (HotspotClient c : clients) s.append('|').append(c.ip).append('/').append(c.mac);
+            return s.toString();
+        }
+    }
+
+    private static class HotspotClient {
+        final String ip;
+        final String mac;
+        final String hostname;
+        HotspotClient(String ip, String mac, String hostname) {
+            this.ip = ip == null ? "" : ip;
+            this.mac = mac == null ? "" : mac;
+            this.hostname = hostname == null ? "" : hostname;
+        }
+        String suggestedName() {
+            if (!hostname.isEmpty() && !"*".equals(hostname)) {
+                String upper = hostname.toUpperCase(Locale.US);
+                if (upper.startsWith("LAPTOP-") || upper.startsWith("DESKTOP-") || upper.contains("WINDOWS")) {
+                    return "💻 " + hostname;
+                }
+                return hostname;
+            }
+            if (!mac.isEmpty()) {
+                String tail = mac.length() >= 5 ? mac.substring(mac.length() - 5).toUpperCase(Locale.US) : mac.toUpperCase(Locale.US);
+                return "Құрылғы " + tail;
+            }
+            return "Құрылғы";
+        }
+    }
+
+    private static class ClientEditor {
+        final HotspotClient client;
+        final EditText name;
+        final EditText down;
+        final EditText up;
+        ClientEditor(HotspotClient client, EditText name, EditText down, EditText up) {
+            this.client = client;
+            this.name = name;
+            this.down = down;
+            this.up = up;
+        }
+    }
+
+    private static class ClientLimit {
+        final HotspotClient client;
+        final String name;
+        final double downMbps;
+        final double upMbps;
+        ClientLimit(HotspotClient client, String name, double downMbps, double upMbps) {
+            this.client = client;
+            this.name = name;
+            this.downMbps = downMbps;
+            this.upMbps = upMbps;
+        }
     }
     private static class CmdResult {
         final int code; final String output;
