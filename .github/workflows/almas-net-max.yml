@@ -1,4 +1,4 @@
-name: Build Almas Net Optimizer MAX
+name: Build ALMAS TELEKOM
 on:
   push:
     branches: [ main ]
@@ -24,5 +24,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Almas-Net-Optimizer-MAX-v2
+          name: ALMAS-TELEKOM-v5
           path: almas-net-max/app/build/outputs/apk/debug/app-debug.apk
