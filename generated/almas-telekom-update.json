@@ -1,8 +1,8 @@
 {
-  "versionCode": 7,
-  "versionName": "7.0",
-  "apkUrl": "https://raw.githubusercontent.com/jjjjjjjjjjjjjjae-hub/my-own-rp-project/main/generated/ALMAS-TELEKOM-v7.apk",
-  "sha256": "9f47a37806d450bfe0a53b1d7f3e02f1acd917949ce80c3e3691a6c7fbfb0e2b",
+  "versionCode": 9,
+  "versionName": "9.0",
+  "apkUrl": "https://raw.githubusercontent.com/jjjjjjjjjjjjjjae-hub/my-own-rp-project/main/generated/ALMAS-TELEKOM-v9.apk",
+  "sha256": "b39b0a15dcd99d564b038465916ef926fea952a02a66ed45d450350692df57cb",
   "signedRelease": true,
-  "notes": "ALMAS TELEKOM v7.0: кірген кезде жаңа әдемі splash-анимация қосылды — логотип zoom/айналу, glow/pulse, атау fade-in және loading line."
+  "notes": "ALMAS TELEKOM v9.0: cinematic telecom boot animation жаңартылды және экран көлденең тұрса арнайы landscape splash автоматты ашылады."
 }
