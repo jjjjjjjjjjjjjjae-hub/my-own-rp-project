@@ -1,8 +1,8 @@
 {
-  "versionCode": 9,
-  "versionName": "9.0",
-  "apkUrl": "https://raw.githubusercontent.com/jjjjjjjjjjjjjjae-hub/my-own-rp-project/main/generated/ALMAS-TELEKOM-v9.apk",
-  "sha256": "b39b0a15dcd99d564b038465916ef926fea952a02a66ed45d450350692df57cb",
+  "versionCode": 10,
+  "versionName": "10.0",
+  "apkUrl": "https://raw.githubusercontent.com/jjjjjjjjjjjjjjae-hub/my-own-rp-project/main/generated/ALMAS-TELEKOM-v10.apk",
+  "sha256": "538314c16a303c61958809f92e88a14462d368a3101d2c24f2dbaf68b890a9c8",
   "signedRelease": true,
-  "notes": "ALMAS TELEKOM v9.0: cinematic telecom boot animation жаңартылды және экран көлденең тұрса арнайы landscape splash автоматты ашылады."
+  "notes": "ALMAS TELEKOM v10.0: кіргенде жаңа transform-таныстыру анимациясы қосылды. Қара экраннан жарық сызық ашылып, ALMAS TELEKOM атауы жиналып шығады, feature-блоктар көрініп, cinematic network boot-қа өтеді. Portrait және landscape режимдері қолдайды."
 }
