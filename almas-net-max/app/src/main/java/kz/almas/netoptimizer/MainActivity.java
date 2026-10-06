@@ -377,7 +377,7 @@ public class MainActivity extends Activity {
         String cmd = "for f in /data/misc/dhcp/dnsmasq.leases " +
                 "/data/misc/apexdata/com.android.tethering/dnsmasq.leases " +
                 "/data/vendor/dhcp/dnsmasq.leases /data/misc/dhcp/*.leases; do " +
-                "[ -r \\"$f\\" ] && cat \\"$f\\"; done 2>/dev/null";
+                "[ -r \"$f\" ] && cat \"$f\"; done 2>/dev/null";
         CmdResult leases = root(cmd);
         if (!leases.ok() || empty(leases.output)) return out;
 
