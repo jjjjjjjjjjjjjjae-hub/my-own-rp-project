@@ -1,8 +1,8 @@
 {
-  "versionCode": 5,
-  "versionName": "5.0",
-  "apkUrl": "https://raw.githubusercontent.com/jjjjjjjjjjjjjjae-hub/my-own-rp-project/main/generated/ALMAS-TELEKOM-v5.apk",
-  "sha256": "786ffab561beeec796a0e8550104b2c4e066533c29e2023091ed96b1c9a53270",
+  "versionCode": 6,
+  "versionName": "6.0",
+  "apkUrl": "https://raw.githubusercontent.com/jjjjjjjjjjjjjjae-hub/my-own-rp-project/main/generated/ALMAS-TELEKOM-v6.apk",
+  "sha256": "ca8cef014e75e91d9460295744d9c7add45512389ea81ed11a71f913f51a4f26",
   "signedRelease": false,
-  "notes": "ALMAS TELEKOM v5.0: нақты Auto Update Engine қосылды. Қолданба жаңа нұсқаны өзі тексереді, APK-ны жүктейді және Android орнатқышын ашады."
+  "notes": "ALMAS TELEKOM v6.0: нақты Auto Update Engine қосылды. Қолданба жаңа нұсқаны өзі тексереді, APK-ны жүктейді және Android орнатқышын ашады."
 }
