@@ -1,14 +1,39 @@
 plugins { id 'com.android.application' }
 
+def almasKeystorePath = System.getenv('ALMAS_KEYSTORE_PATH')
+def almasKeystorePassword = System.getenv('ALMAS_KEYSTORE_PASSWORD')
+def almasKeyAlias = System.getenv('ALMAS_KEY_ALIAS')
+def almasKeyPassword = System.getenv('ALMAS_KEY_PASSWORD')
+
 android {
     namespace 'kz.almas.netoptimizer'
     compileSdk 35
+
+    signingConfigs {
+        release {
+            if (almasKeystorePath) {
+                storeFile file(almasKeystorePath)
+                storePassword almasKeystorePassword
+                keyAlias almasKeyAlias
+                keyPassword almasKeyPassword
+            }
+        }
+    }
 
     defaultConfig {
         applicationId 'kz.almas.netoptimizer'
         minSdk 24
         targetSdk 35
-        versionCode 4
-        versionName '4.0'
+        versionCode 5
+        versionName '5.0'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            if (almasKeystorePath) {
+                signingConfig signingConfigs.release
+            }
+        }
     }
 }
